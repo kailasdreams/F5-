@@ -1,0 +1,51 @@
+import os
+
+from f5.bigip import ManagementRoot
+import re
+from time import gmtime, strftime
+from configparser import ConfigParser
+
+def backup(mgmt, server):
+“””
+
+:param mgmt:
+:return:
+“””
+date_time = strftime(“%Y-%m-%d_%H_%M_%S”, gmtime())
+filename = ‘{0}_{1}’.format(date_time, server)
+cmd_args = ‘-c “tmsh save sys ucs {Filename}”‘.format(Filename=filename)
+dgshow = mgmt.tm.util.bash.exec_cmd(‘run’, utilCmdArgs=cmd_args)
+if ‘is saved.’ in dgshow.commandResult:
+print(‘Backup Successful.\n’)
+
+# ———————————————————————————————————————-#
+
+def main():
+“””
+
+:return:
+“””
+
+# dirname, filename = os.path.split(os.path.abspath(__file__))
+#dirname, filename = os.path.split(os.path.abspath(sys.argv[0]))
+#config_file = os.path.join(dirname, ‘Config.ini’)
+
+Advertisements
+
+REPORT THIS AD
+
+#parser_ui_ = ConfigParser()
+#parser_ui_.read(config_file)
+#section = ‘Settings’
+server = (‘server’)
+username = (‘username’)
+password = (‘password’)
+
+# Connect to the BigIP
+mgmt = ManagementRoot(server, username, password)
+
+# Backup
+backup(mgmt, server)
+
+if __name__ == ‘__main__’:
+main()
